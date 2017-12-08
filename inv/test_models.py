@@ -17,7 +17,7 @@ class LCItemTests(TestCase):
             color='Demo Color',
         )
 
-    def test_receive_yarn_method(self):
+    def test_lcitem_methods(self):
         """
         Test all the different outcomes of the LCItem methods.
         """

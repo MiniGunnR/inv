@@ -121,3 +121,15 @@ class YarnRcv(Timestamp):
         return "{lc_item} - challan: {challan}, lot: {lot}".format(
             lc_item=self.lc_item, challan=self.challan_no, lot=self.lot
         )
+
+    def save(self, *args, **kwargs):
+        # if object is created
+        if self.pk is None:
+            self.lc_item.receive_yarn(self.quantity_rcv)
+        # if object is updated
+        else:
+            prev_quantity_rcv = YarnRcv.objects.get(id=self.pk).quantity_rcv
+            # if previous qty and current qty is not the same
+            if prev_quantity_rcv != self.quantity_rcv:
+                self.lc_item.edit_receive(prev_quantity_rcv, self.quantity_rcv)
+        super().save(*args, **kwargs)
