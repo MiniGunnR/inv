@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import LC, LCItem
+from .models import LC, LCItem, YarnRcv
 
 
 class LCItemInline(admin.TabularInline):
@@ -14,3 +14,5 @@ class LCAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(LC, LCAdmin)
+
+admin.site.register(YarnRcv)

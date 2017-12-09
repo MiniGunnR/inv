@@ -1,0 +1,10 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ lc_items.management_form }}
+
+    {% for form in lc_items.forms %}
+        {{ form }} <br/>
+        {% endfor %}
+    <input type="submit" value="Create" />
+</form>

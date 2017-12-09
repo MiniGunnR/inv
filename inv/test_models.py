@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import LC, LCItem
+from .models import LC, LCItem, YarnRcv
 
 
 class LCItemTests(TestCase):
@@ -46,3 +46,34 @@ class LCItemTests(TestCase):
         # Same error when trying to edit yarn delivery to change to a greater amount
         self.assertEqual(obj.edit_deliver(50, 100), "Amount to deliver is greater than current yarn balance.")
 
+
+class YarnRcvTests(TestCase):
+
+    def setUp(self):
+        lc = LC.objects.create(date="2017-12-08", number="0987654321", spinning_mill="Demo Spinning Mill")
+        lc_item = LCItem.objects.create(
+            lc=lc,
+            count='unique',
+            composition='100% Cotton',
+            quantity=1000,
+            unit='kg',
+            style_no='Demo Style',
+            color='Demo Color',
+        )
+        yr = YarnRcv.objects.create(
+            lc_item = lc_item,
+            date = "2017-12-08",
+            challan_no = "67345",
+            lot = "9823",
+            quantity_rcv = 100
+        )
+
+    def test_yarn_receive(self):
+        # See if YR item creation changes value in lc_item
+        lc_item = LCItem.objects.get(count='unique')
+        yr = YarnRcv.objects.get(lc_item=lc_item)
+        self.assertEqual(yr.quantity_rcv, lc_item.yarn_rcv)
+        # See if when YR is changed if lc_item is changed IMPORTANT # # # # ## # # # # # #
+        yr.__setattr__('quantity_rcv', 200)
+        yr.save()
+        self.assertEqual(yr.quantity_rcv, lc_item.yarn_rcv)
