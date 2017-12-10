@@ -41,7 +41,7 @@ class LCItem(models.Model):
         choices=UNIT_CHOICES,
         default=KG
     )
-    style_no = models.CharField(max_length=50, blank=True)
+    style = models.CharField(max_length=50, blank=True)
     color = models.CharField(max_length=100, blank=True)
 
     yarn_rcv = models.PositiveIntegerField(default=0)
