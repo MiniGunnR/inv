@@ -10,3 +10,8 @@ class LCItemForm(forms.ModelForm):
         fields = ['count', 'composition', 'quantity', 'unit', 'style', 'color']
 
 LC_Formset = inlineformset_factory(LC, LCItem, form=LCItemForm, extra=1)
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label="LC Number")
+

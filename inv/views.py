@@ -2,9 +2,9 @@ from django.shortcuts import render, reverse
 from django.views import generic
 from django.db import transaction
 
-from .models import LC, YarnRcv
+from .models import LC, LCItem, YarnRcv
 
-from .forms import LC_Formset
+from .forms import LC_Formset, SearchForm
 
 
 class LCCreateView(generic.CreateView):
@@ -68,5 +68,35 @@ class LCListView(generic.ListView):
 
 class YarnRcvCreateView(generic.CreateView):
   model = YarnRcv
-  fields = ['lc_item', 'date', 'challan_no', 'lot', 'quantity_rcv']
+  fields = ['date', 'challan_no', 'lot', 'quantity_rcv']
   template_name = 'inv/yarn_rcv_form.html'
+
+  def get_success_url(self):
+    lc_pk = LCItem.objects.get(id=self.kwargs['lc_item_pk']).lc_id
+    return reverse('inv:lc_detailview', args=[lc_pk])
+
+  def form_valid(self, form):
+    lc_item_pk = self.kwargs['lc_item_pk']
+    form.instance.lc_item = LCItem.objects.get(id=lc_item_pk)
+    return super().form_valid(form)
+
+
+class LCDetailView(generic.DetailView):
+  model = LC
+  template_name = 'inv/lc_detail.html'
+
+
+class LCSearchView(generic.FormView):
+  template_name = 'inv/lc_search.html'
+  form_class = SearchForm
+
+
+class LCSearchResultListView(generic.ListView):
+  model = LC
+  template_name = 'inv/lc_list.html'
+
+  def get_queryset(self):
+    query = self.request.GET.get('query', '')
+    print(query)
+    return LC.objects.filter(number__icontains=query)
+

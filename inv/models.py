@@ -77,9 +77,9 @@ class LCItem(models.Model):
                     return "Yarn Balance cannot be zero. Please check the current transaction for any errors."
                 self.save()
             else:
-                return "Amount to receive cannot be more than amount available."
+                raise ArithmeticError("Amount to receive cannot be more than amount available.")
         else:
-            return "Quantity issued on LC have already been received."
+            raise ArithmeticError("Quantity issued on LC have already been received.")
 
     def edit_receive(self, old_amount, new_amount):
         """
@@ -121,6 +121,9 @@ class YarnRcv(Timestamp):
         return "{lc_item} - challan: {challan}, lot: {lot}".format(
             lc_item=self.lc_item, challan=self.challan_no, lot=self.lot
         )
+
+    class Meta:
+        verbose_name_plural = "Yarn Rcv"
 
     def save(self, *args, **kwargs):
         # if object is created
