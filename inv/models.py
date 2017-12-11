@@ -1,9 +1,9 @@
 from django.db import models
 
-from utils.models import Timestamp
+from utils.models import Timestamped
 
 
-class LC(Timestamp):
+class LC(Timestamped):
     """
     This model saves LC information.
     """
@@ -110,7 +110,7 @@ class LCItem(models.Model):
         return self.deliver_yarn(new_amount)
 
 
-class YarnRcv(Timestamp):
+class YarnRcv(Timestamped):
     lc_item = models.ForeignKey(LCItem, on_delete=models.CASCADE)
     date = models.DateField()
     challan_no = models.CharField(max_length=20)

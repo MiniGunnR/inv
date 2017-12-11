@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Timestamp(models.Model):
+class Timestamped(models.Model):
     """
     The following two fields are common to a lot of models
     """
