@@ -97,6 +97,5 @@ class LCSearchResultListView(generic.ListView):
 
   def get_queryset(self):
     query = self.request.GET.get('query', '')
-    print(query)
     return LC.objects.filter(number__icontains=query)
 
